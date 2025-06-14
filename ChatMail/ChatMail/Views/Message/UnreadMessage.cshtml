@@ -1,0 +1,123 @@
+﻿@using ChatMail.Entities
+@model List<Message>
+
+@{
+    ViewData["Title"] = "Çöp Kutusu";
+    Layout = null;  /* Eğer ortak layout varsa değiştirilebilir */
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Çöp Kutusu - @ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0; padding: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h3 {
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 15px 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .email-list .message {
+            background-color: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .email-list .message:hover {
+            background-color: #f0f0ff;
+        }
+        .email-list a {
+            text-decoration: none;
+            color: #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .col-mail-1 {
+            font-style: italic;
+            color: #777;
+            flex: 0 0 90px;
+            font-size: 14px;
+        }
+        .col-mail-2 {
+            flex-grow: 1;
+            margin-left: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .subject {
+            font-weight: 700;
+            font-size: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 380px;
+        }
+        .date {
+            color: #999;
+            font-size: 13px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Çöp Kutusu</h3>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert-info">Çöp kutusunda mesaj yok.</div>
+        }
+        else
+        {
+            <div class="email-list">
+                @foreach (var item in Model)
+                {
+                    <div class="message">
+                        <a href="@Url.Action("MessageDetail", "Message", new { id = item.MessageId })" 
+                           title="@item.Subject">
+                            <div class="col-mail-1">
+                                @(string.Equals(item.SenderEmail, User.Identity.Name, StringComparison.OrdinalIgnoreCase) ? "Gönderdiğin" : "Aldığın")
+                            </div>
+                            <div class="col-mail-2">
+                                <div class="subject">@item.Subject</div>
+                                <div class="date">@item.SendDate.ToString("dd-MMM-yyyy")</div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

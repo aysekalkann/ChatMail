@@ -1,0 +1,110 @@
+﻿@model List<ChatMail.Entities.Message>
+@{
+    ViewData["Title"] = "Inbox";
+    Layout = "~/Views/Shared/_MessageLayout.cshtml";
+}
+
+<style>
+.email-right-box {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.email-list {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.email-list:hover {
+    background-color: #f9f9f9;
+}
+
+.email-checkbox {
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.email-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+a.text-decoration-none {
+    flex: 1; /* Geri kalan alanı kapla */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+}
+
+a.text-decoration-none:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.subject {
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%; /* Konunun çok uzun olması durumunda kısalt */
+}
+
+.date {
+    font-size: 0.85rem;
+    color: #6c757d; /* Bootstrap text-muted rengi */
+    margin-left: 15px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+</style>
+
+<div class="email-right-box">
+    <form method="get" asp-action="Inbox" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search"
+                   style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 500px;"
+                   placeholder="Konuya göre ara..."
+                   value="@ViewBag.SearchTerm" />
+
+            <div style="display: flex; gap: 90px;">
+                <button type="submit" class="btn btn-primary">Ara</button>
+            </div>
+        </div>
+    </form>
+
+    <form method="post" action="/Message/ChangeMessageStatus/">
+        <div role="toolbar" class="toolbar">
+            <div class="btn-group">
+                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-dark dropdown-toggle" type="button">
+                    Gelen Mesajlar  <span class="caret m-l-5"></span>
+                </button>
+                <div class="dropdown-menu">
+                    <button type="submit" class="btn btn-outline-danger">Okundu Olarak İşaretle</button>
+                </div>
+                <br />
+                <br />
+            </div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <div class="email-list d-flex align-items-center">
+                <div class="email-checkbox">
+                    <input id="chk_@item.MessageId" type="checkbox" name="messageIdList" value="@item.MessageId" class="message-checkbox" />
+                    <label class="toggle" for="chk_@item.MessageId"></label>
+                </div>
+
+                <a asp-controller="Message" asp-action="MessageDetail" asp-route-id="@item.MessageId" class="text-decoration-none">
+                    <div class="subject">@item.Subject</div>
+                    <div class="date">@item.SendDate.ToString("dd-MMM-yyyy")</div>
+                </a>
+            </div>
+        }
+    </form>
+</div>

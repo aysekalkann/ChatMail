@@ -1,0 +1,121 @@
+﻿@model LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Chat & Email Giriş Paneli</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h4 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 0px 3px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            border: 1.8px solid #ccc;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #7175F9;
+            outline: none;
+        }
+
+        .btn-submit {
+            background-color: #7175F9;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 0;
+            width: 100%;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #595cd8;
+        }
+
+        .text-danger {
+            color: #d9534f;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .footer-text a {
+            color: #7175F9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h4>Chat & Email Giriş Paneli</h4>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="text-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+
+        <form method="post" novalidate>
+            <input type="text" class="form-control" placeholder="Kullanıcı Adı" asp-for="UserName" />
+            <input type="password" class="form-control" placeholder="Şifreniz" asp-for="Password" />
+            <button type="submit" class="btn-submit">Giriş Yap</button>
+        </form>
+
+        <p class="footer-text mt-4">
+            Bir hesabın var mı? <a href="/Register/CreateUser/">Kayıt Ol</a>
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+﻿@model List<ChatMail.Entities.Message>
+
+@{
+    ViewData["Title"] = "Gönderilen Mesajlar";
+    Layout = "~/Views/Shared/_MessageLayout.cshtml";
+}
+
+<style>
+    body, .container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h3 {
+        color: #333;
+        font-weight: 700;
+    }
+
+    .input-group .form-control {
+        border-radius: 6px 0 0 6px;
+        border: 1.8px solid #ccc;
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    .input-group-append .btn {
+        background-color: #7175F9;
+        border: none;
+        border-radius: 0 6px 6px 0;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .input-group-append .btn:hover {
+        background-color: #595cd8;
+    }
+
+    .list-group-item {
+        border: 1.8px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        transition: background-color 0.2s ease;
+        color: #333;
+    }
+
+    .list-group-item:hover {
+        background-color: #f0f1ff;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .list-group-item h5 {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .list-group-item small {
+        color: #7175F9;
+        font-weight: 600;
+    }
+
+    .list-group-item p {
+        margin-bottom: 4px;
+        font-size: 15px;
+    }
+
+    .list-group-item p.text-muted {
+        color: #888;
+        font-style: italic;
+    }
+
+    .alert-info {
+        background-color: #e7f3fe;
+        border-color: #b3d8ff;
+        color: #31708f;
+        border-radius: 6px;
+        padding: 15px;
+        font-weight: 600;
+        text-align: center;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <h3 class="mb-4 text-center">Gönderilen Mesajlar</h3>
+
+            <form method="get" asp-action="Sendbox" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Konu, alıcı veya mesaj içeriğinde ara..." value="@ViewBag.SearchTerm" />
+                    <div class="input-group-append">
+                        <button class="btn" type="submit">Ara</button>
+                    </div>
+                </div>
+            </form>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="list-group">
+                    @foreach (var item in Model)
+                    {
+                        <a asp-controller="Message" asp-action="MessageDetail" asp-route-id="@item.MessageId" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5>@item.Subject</h5>
+                                <small>@item.SendDate.ToString("dd.MM.yyyy HH:mm")</small>
+                            </div>
+                            <p><strong>Alıcı:</strong> @item.ReceiverEmail</p>
+                            <p class="text-muted">
+                                @item.MessageDetail.Substring(0, Math.Min(item.MessageDetail.Length, 100))...
+                            </p>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mt-4" role="alert">
+                    Henüz gönderdiğiniz bir mesaj bulunmamaktadır.
+                </div>
+            }
+        </div>
+    </div>
+</div>
